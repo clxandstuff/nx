@@ -77,10 +77,7 @@ import {
   FLUSH_SYNC_GENERATOR_CHANGES_TO_DISK,
   type HandleFlushSyncGeneratorChangesToDiskMessage,
 } from '../message-types/flush-sync-generator-changes-to-disk';
-import {
-  DelayedSpinner,
-  SHOULD_SHOW_SPINNERS,
-} from '../../utils/delayed-spinner';
+import { DelayedSpinner } from '../../utils/delayed-spinner';
 
 const DAEMON_ENV_SETTINGS = {
   NX_PROJECT_GLOB_CACHE: 'false',
@@ -200,10 +197,9 @@ export class DaemonClient {
   }> {
     let spinner: DelayedSpinner;
     // If the graph takes a while to load, we want to show a spinner.
-    spinner = new DelayedSpinner({
-      message: 'Calculating the project graph on the Nx Daemon',
-      ciDelay: 10_000,
-    }).scheduleMessageUpdate({
+    spinner = new DelayedSpinner(
+      'Calculating the project graph on the Nx Daemon'
+    ).scheduleMessageUpdate({
       message:
         'Calculating the project graph on the Nx Daemon is taking longer than expected. Re-run with NX_DAEMON=false to see more details.',
       ciDelay: 60_000,

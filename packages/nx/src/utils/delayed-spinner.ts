@@ -39,13 +39,13 @@ export class DelayedSpinner {
       typeof messageOrOpts === 'string' ? messageOrOpts : messageOrOpts.message;
     const opts: Omit<DelayedSpinnerOptions, 'message'> =
       typeof messageOrOpts === 'string' ? { delay: ms } : messageOrOpts;
-    const ciDelay = opts.ciDelay ?? opts.delay ?? 5000;
+    const ciDelay = opts.ciDelay ?? opts.delay ?? 10_000;
     const delay = SHOULD_SHOW_SPINNERS ? ciDelay : opts.delay ?? 500;
 
     this.timeouts.push(
       setTimeout(() => {
         if (!SHOULD_SHOW_SPINNERS) {
-          console.log(message);
+          console.warn(message);
         } else {
           this.spinner = ora(message);
         }
@@ -64,7 +64,7 @@ export class DelayedSpinner {
     if (this.spinner && SHOULD_SHOW_SPINNERS) {
       this.spinner.text = message;
     } else if (this.lastMessage && this.lastMessage !== message) {
-      console.log(message);
+      console.warn(message);
       this.lastMessage = message;
     }
     return this;
@@ -98,4 +98,4 @@ export class DelayedSpinner {
   }
 }
 
-export const SHOULD_SHOW_SPINNERS = process.stdout.isTTY && !isCI();
+const SHOULD_SHOW_SPINNERS = process.stdout.isTTY && !isCI();
